@@ -1,0 +1,57 @@
+name: Kreativ Keszlet Windows build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag"
+        required: true
+        default: "v36.0"
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Repository letöltése
+        uses: actions/checkout@v4
+
+      - name: V36 ZIP kicsomagolása
+        shell: powershell
+        run: |
+          Remove-Item -Recurse -Force app -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory -Path app | Out-Null
+          Expand-Archive -Path "KreativKeszlet_V36_KOZOS_ADAT_JAVITVA(1).zip" -DestinationPath app
+
+      - name: Windows program elkészítése
+        shell: cmd
+        run: |
+          cd app
+          call build_windows.bat
+
+      - name: Windows ZIP elkészítése
+        shell: powershell
+        run: |
+          Compress-Archive `
+            -Path "app\dist\KreativKeszlet\*" `
+            -DestinationPath "KreativKeszlet-Windows.zip" `
+            -Force
+
+      - name: Windows ZIP feltöltése a Release-hez
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "${{ github.event.release.tag_name }}"
+          if (-not $tag) {
+            $tag = "${{ inputs.tag }}"
+          }
+
+          gh release upload $tag `
+            "KreativKeszlet-Windows.zip" `
+            --clobber
