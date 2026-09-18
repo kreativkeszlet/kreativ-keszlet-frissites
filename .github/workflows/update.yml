@@ -26,7 +26,7 @@ jobs:
         run: |
           Remove-Item -Recurse -Force app -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Path app | Out-Null
-          Expand-Archive -Path "KreativKeszlet_V36_1_AUTOFRISSITES.zip" -DestinationPath app
+          Expand-Archive -Path "KreativKeszlet_V36_2_AUTOFRISSITES_FIX.zip" -DestinationPath app
 
       - name: Windows program elkészítése
         shell: cmd
