@@ -36,13 +36,14 @@ jobs:
           if (-not $build) { throw "build_windows.bat nem található" }
           Set-Location $build.DirectoryName
           cmd /c $build.FullName
-            - name: Windows ZIP elkészítése
+
+      - name: Windows ZIP elkészítése
         shell: powershell
         run: |
           $dist = Get-ChildItem -Path app -Directory -Filter "dist" -Recurse | Select-Object -First 1
           if (-not $dist) { throw "dist mappa nem található" }
           Compress-Archive `
-            -Path "$($dist.FullName)\KreativKeszlet\*" `
+            -Path "$($dist.FullName)\*" `
             -DestinationPath "KreativKeszlet-Windows.zip" `
             -Force
 
