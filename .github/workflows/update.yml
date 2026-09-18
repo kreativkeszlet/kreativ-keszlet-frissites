@@ -28,12 +28,14 @@ jobs:
           New-Item -ItemType Directory -Path app | Out-Null
           Expand-Archive -Path "KreativKeszlet_V36_2_AUTOFRISSITES_FIX.zip" -DestinationPath app
 
+     
       - name: Windows program elkészítése
-        shell: cmd
+        shell: powershell
         run: |
-          cd app
-          call build_windows.bat
-
+          $build = Get-ChildItem -Path app -Filter "build_windows.bat" -Recurse | Select-Object -First 1
+          if (-not $build) { throw "build_windows.bat nem található" }
+          Set-Location $build.DirectoryName
+          cmd /c $build.FullName
       - name: Windows ZIP elkészítése
         shell: powershell
         run: |
