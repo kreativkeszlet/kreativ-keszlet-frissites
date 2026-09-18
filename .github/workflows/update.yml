@@ -26,7 +26,7 @@ jobs:
         run: |
           Remove-Item -Recurse -Force app -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Path app | Out-Null
-          Expand-Archive -Path "KreativKeszlet_V36_KOZOS_ADAT_JAVITVA(1).zip" -DestinationPath app
+          Expand-Archive -Path "KreativKeszlet_V36_KOZOS_ADAT_JAVITVA.zip" -DestinationPath app
 
       - name: Windows program elkészítése
         shell: cmd
